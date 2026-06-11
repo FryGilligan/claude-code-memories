@@ -1,0 +1,19 @@
+[Unit]
+Description=claude-code-memories Discord review bot (oneshot)
+After=network-online.target
+Wants=network-online.target
+
+# Before installing this unit, replace REPLACE_USER and REPLACE_REPO_PATH below
+# with your username and the absolute path to the cloned repo. See the README.
+
+[Service]
+Type=oneshot
+User=REPLACE_USER
+Group=REPLACE_USER
+WorkingDirectory=REPLACE_REPO_PATH/bot
+EnvironmentFile=REPLACE_REPO_PATH/bot/bot.env
+ExecStart=/usr/bin/python3 REPLACE_REPO_PATH/bot/memories_bot.py
+TimeoutStartSec=60
+
+[Install]
+WantedBy=multi-user.target

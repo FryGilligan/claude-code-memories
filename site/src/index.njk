@@ -1,0 +1,110 @@
+---
+layout: base.njk
+title: calendar
+permalink: /index.html
+---
+{% set months = collections.memoryMonths %}
+{% set byDate = collections.memoriesByDate %}
+{% if months and months.length > 0 %}
+  {% set currentMonth = months[0] %}
+{% else %}
+  {% set currentMonth = "" %}
+{% endif %}
+
+{% if currentMonth %}
+  {% set prevMonth = currentMonth | offsetMonth(-1) %}
+  {% set nextMonth = currentMonth | offsetMonth(1) %}
+  {% set prevHasMemories = months.indexOf(prevMonth) >= 0 %}
+  {% set nextHasMemories = months.indexOf(nextMonth) >= 0 %}
+
+  <div class="main-topbar">
+    <div class="month-title">
+      <span class="month-accent">{{ currentMonth | formatMonth }}</span>
+    </div>
+    <div class="nav-arrows">
+      <a href="/month/{{ prevMonth }}/" class="nav-btn {% if not prevHasMemories %}disabled{% endif %}">← {{ prevMonth | formatMonth }}</a>
+      <a href="/month/{{ nextMonth }}/" class="nav-btn {% if not nextHasMemories %}disabled{% endif %}">{{ nextMonth | formatMonth }} →</a>
+    </div>
+  </div>
+
+  {# ── Year activity heatmap ──────────────────────────────────────── #}
+  {% set heat = byDate | yearHeatmap %}
+  {% set heatMonths = heat | yearHeatmapMonths %}
+  <div class="heatmap">
+    <div class="heatmap-label">activity | {{ build.year }}</div>
+    <div class="heatmap-body">
+      <div class="heatmap-months">
+        {% for m in heatMonths %}
+          <span class="hm-month" style="grid-column: {{ m.col }}">{{ m.label }}</span>
+        {% endfor %}
+      </div>
+      <div class="heatmap-grid">
+        {% for c in heat %}
+          {% if c.blank %}
+            <div class="hm-cell hm-blank"></div>
+          {% elif c.future %}
+            <div class="hm-cell hm-future"></div>
+          {% else %}
+            <div class="hm-cell hm-l{{ c.level }}"
+                 title="{{ c.date }} — {{ c.count }} {% if c.count == 1 %}entry{% else %}entries{% endif %}"
+                 {% if c.count > 0 %}data-href="/day/{{ c.date }}/"{% endif %}></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="heatmap-legend">
+        <span>less</span>
+        <span class="hm-cell hm-l0"></span>
+        <span class="hm-cell hm-l1"></span>
+        <span class="hm-cell hm-l2"></span>
+        <span class="hm-cell hm-l3"></span>
+        <span class="hm-cell hm-l4"></span>
+        <span>more</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cal-wrap">
+    <div class="cal-head-row">
+      <div class="cal-hd">Mon</div>
+      <div class="cal-hd">Tue</div>
+      <div class="cal-hd">Wed</div>
+      <div class="cal-hd">Thu</div>
+      <div class="cal-hd">Fri</div>
+      <div class="cal-hd">Sat</div>
+      <div class="cal-hd">Sun</div>
+    </div>
+    <div class="calendar">
+      {% for cell in currentMonth | monthGrid(byDate) %}
+        {% if cell.blank %}
+          <div class="cal-cell blank"></div>
+        {% else %}
+          <div class="cal-cell {% if cell.count > 0 %}has-memory{% endif %}">
+            <span class="day-num">{{ cell.day }}</span>
+            {% if cell.count > 0 %}
+              <a href="/day/{{ cell.date }}/" class="day-link">
+                <span class="dot"></span>
+                <span class="count">{{ cell.count }} {% if cell.count == 1 %}entry{% else %}entries{% endif %}</span>
+              </a>
+              <div class="cell-pop">
+                <div class="cell-pop-head">{{ cell.date }} | {{ cell.count }} {% if cell.count == 1 %}entry{% else %}entries{% endif %}</div>
+                {% for m in cell.entries %}
+                  <a href="{{ m.url }}" class="pop-row">
+                    <span class="pop-time">{{ m.data.time }}</span>
+                    <span class="pop-summary">{{ m.data.title or (m.data.session_id | substr(0,8)) }}</span>
+                  </a>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+{% else %}
+  <div class="page-content">
+    <p style="color: var(--fg-mute); padding: 60px 0; text-align: center;">
+      no memories yet — run <code>/publish-memories</code> in any Claude Code session.
+    </p>
+  </div>
+{% endif %}

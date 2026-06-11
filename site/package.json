@@ -1,0 +1,15 @@
+{
+  "name": "memories",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personal session memories — Claude Code transcripts indexed and searchable",
+  "scripts": {
+    "build": "eleventy && pagefind --site _site",
+    "dev": "eleventy --serve --quiet",
+    "clean": "rm -rf _site"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0",
+    "pagefind": "^1.1.0"
+  }
+}

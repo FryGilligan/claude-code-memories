@@ -1,0 +1,64 @@
+---
+pagination:
+  data: collections.memoryMonths
+  size: 1
+  alias: month
+permalink: "/month/{{ month }}/"
+layout: base.njk
+eleventyComputed:
+  title: "{{ month | formatMonth }}"
+---
+{% set months = collections.memoryMonths %}
+{% set byDate = collections.memoriesByDate %}
+{% set prevMonth = month | offsetMonth(-1) %}
+{% set nextMonth = month | offsetMonth(1) %}
+{% set prevHasMemories = months.indexOf(prevMonth) >= 0 %}
+{% set nextHasMemories = months.indexOf(nextMonth) >= 0 %}
+
+<div class="main-topbar">
+  <div class="month-title">
+    <span class="month-accent">{{ month | formatMonth }}</span>
+  </div>
+  <div class="nav-arrows">
+    <a href="/month/{{ prevMonth }}/" class="nav-btn {% if not prevHasMemories %}disabled{% endif %}">← {{ prevMonth | formatMonth }}</a>
+    <a href="/month/{{ nextMonth }}/" class="nav-btn {% if not nextHasMemories %}disabled{% endif %}">{{ nextMonth | formatMonth }} →</a>
+  </div>
+</div>
+
+<div class="cal-wrap">
+  <div class="cal-head-row">
+    <div class="cal-hd">Mon</div>
+    <div class="cal-hd">Tue</div>
+    <div class="cal-hd">Wed</div>
+    <div class="cal-hd">Thu</div>
+    <div class="cal-hd">Fri</div>
+    <div class="cal-hd">Sat</div>
+    <div class="cal-hd">Sun</div>
+  </div>
+  <div class="calendar">
+    {% for cell in month | monthGrid(byDate) %}
+      {% if cell.blank %}
+        <div class="cal-cell blank"></div>
+      {% else %}
+        <div class="cal-cell {% if cell.count > 0 %}has-memory{% endif %}">
+          <span class="day-num">{{ cell.day }}</span>
+          {% if cell.count > 0 %}
+            <a href="/day/{{ cell.date }}/" class="day-link">
+              <span class="dot"></span>
+              <span class="count">{{ cell.count }} {% if cell.count == 1 %}entry{% else %}entries{% endif %}</span>
+            </a>
+            <div class="cell-pop">
+              <div class="cell-pop-head">{{ cell.date }} | {{ cell.count }} {% if cell.count == 1 %}entry{% else %}entries{% endif %}</div>
+              {% for m in cell.entries %}
+                <a href="{{ m.url }}" class="pop-row">
+                  <span class="pop-time">{{ m.data.time }}</span>
+                  <span class="pop-summary">{{ m.data.title or (m.data.session_id | substr(0,8)) }}</span>
+                </a>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

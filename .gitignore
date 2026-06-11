@@ -1,0 +1,35 @@
+# Secrets — never commit
+.env
+*.env
+!*.env.example
+
+# Your actual memories (this repo ships the machinery, not the content).
+# If you want a public archive, fork and remove this line.
+memories/2*/
+memories/_drafts/
+memories/_rejected/
+
+# Build artefacts
+site/_site/
+site/node_modules/
+site/.cache/
+site/src/_includes/pagefind/
+
+# Bot runtime state + logs
+bot/state.json
+bot/bot.log
+bot/*.log
+
+# Auto-draft log
+**/.auto_draft.log
+
+# Python
+__pycache__/
+*.pyc
+
+# Editor cruft
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store

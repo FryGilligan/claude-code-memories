@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{% if title %}{{ title }} | {% endif %}memories</title>
+  <link rel="stylesheet" href="/css/theme.css?v={{ build.timestamp }}">
+  <link rel="stylesheet" href="/pagefind/pagefind-ui.css" onerror="this.remove();">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sb-top">
+        {% include "header.njk" %}
+      </div>
+      {% if collections.memoryMonths and collections.memoryMonths.length > 0 %}
+      <div class="sb-mini">
+        <div class="sb-mini-label">{{ collections.memoryMonths[0] | formatMonth }}</div>
+        <div class="mini-grid">
+          <div class="mini-hd">m</div><div class="mini-hd">t</div><div class="mini-hd">w</div>
+          <div class="mini-hd">t</div><div class="mini-hd">f</div><div class="mini-hd">s</div><div class="mini-hd">s</div>
+          {% for cell in collections.memoryMonths[0] | monthGrid(collections.memoriesByDate) %}
+            {% if cell.blank %}
+              <div class="mini-cell blank"></div>
+            {% else %}
+              <div class="mini-cell {% if cell.count > 0 %}has{% endif %}">{{ cell.day }}</div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      <div class="sb-stats">
+        <div class="sb-stat"><span>total entries</span><span class="val">{{ collections.memory | length }}</span></div>
+        <div class="sb-stat"><span>months active</span><span class="val">{{ collections.memoryMonths | length }}</span></div>
+      </div>
+    </aside>
+    <div class="main-area">
+      <main data-pagefind-body>
+        {{ content | safe }}
+      </main>
+      <footer class="site-footer">
+        session memories | {{ collections.memory | length }} entries
+      </footer>
+    </div>
+  </div>
+  <script src="/pagefind/pagefind-ui.js" onerror="this.remove();"></script>
+  <script src="/js/keynav.js?v={{ build.timestamp }}" defer></script>
+</body>
+</html>

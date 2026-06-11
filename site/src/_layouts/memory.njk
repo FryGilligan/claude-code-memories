@@ -1,0 +1,17 @@
+---
+layout: base.njk
+---
+<article class="memory page-content">
+  <h1>{{ title or session_id }}</h1>
+
+  <div class="memory-meta">
+    <div class="row"><span class="label">date</span> <span>{{ date | formatDate }}{% if time %} {{ time }}{% endif %}</span></div>
+    {% if duration_mins %}<div class="row"><span class="label">duration</span> <span>{{ duration_mins }} min</span></div>{% endif %}
+    {% if projects %}<div class="row"><span class="label">projects</span> <span>{% for p in projects %}<span class="tag">{{ p }}</span>{% endfor %}</span></div>{% endif %}
+    {% if tags %}<div class="row"><span class="label">tags</span> <span>{% for t in tags %}<span class="tag">{{ t }}</span>{% endfor %}</span></div>{% endif %}
+    {% if tools_produced and tools_produced.length %}<div class="row"><span class="label">tools</span> <span>{% for t in tools_produced %}<span class="tag">{{ t }}</span>{% endfor %}</span></div>{% endif %}
+    <div class="row"><span class="label">session_id</span> <code>{{ session_id }}</code></div>
+  </div>
+
+  {{ content | safe }}
+</article>

@@ -1,0 +1,30 @@
+---
+pagination:
+  data: collections.memoryDates
+  size: 1
+  alias: day
+permalink: "/day/{{ day }}/"
+layout: base.njk
+eleventyComputed:
+  title: "{{ day | formatDate }}"
+---
+<div class="page-content">
+  <h1>{{ day | formatDate }}</h1>
+
+  <ul class="memory-list">
+    {% for m in collections.memory | onDate(day) %}
+      <li>
+        <div class="meta">
+          {{ m.data.time }}
+          {% if m.data.duration_mins %} | {{ m.data.duration_mins }} min{% endif %}
+          {% if m.data.projects %} | {% for p in m.data.projects %}{{ p }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}
+        </div>
+        <div class="summary">
+          <a href="{{ m.url }}">{{ m.data.title or m.data.session_id }}</a>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <p style="margin-top:24px"><a href="/month/{{ day | substr(0, 7) }}/">← back to {{ day | substr(0, 7) | formatMonth }}</a></p>
+</div>

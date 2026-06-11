@@ -1,0 +1,16 @@
+{
+  "_comment": "Add this 'SessionEnd' entry to your Claude Code settings.json (~/.claude/settings.json or .claude/settings.json in a project). Replace REPLACE_REPO_PATH with the absolute path to your clone. If you already have a 'hooks' block, merge this 'SessionEnd' array into it.",
+  "hooks": {
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "REPLACE_REPO_PATH/scripts/auto_draft.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

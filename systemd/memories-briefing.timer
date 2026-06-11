@@ -1,0 +1,10 @@
+[Unit]
+Description=Run memories-briefing on Monday mornings (08:00 system-local)
+
+[Timer]
+OnCalendar=Mon *-*-* 08:00:00
+Persistent=true
+Unit=memories-briefing.service
+
+[Install]
+WantedBy=timers.target

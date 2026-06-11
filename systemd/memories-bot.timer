@@ -1,0 +1,10 @@
+[Unit]
+Description=Run claude-code-memories review bot every 30 minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=30min
+Unit=memories-bot.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,19 @@
+---
+layout: base.njk
+title: search
+permalink: /search/index.html
+---
+<div class="page-content">
+<h1>search memories</h1>
+<div id="pagefind-search"></div>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    if (window.PagefindUI) {
+      new PagefindUI({ element: "#pagefind-search", showImages: false, resetStyles: false });
+    } else {
+      document.getElementById("pagefind-search").innerHTML =
+        "<p style='color: var(--fg-dim)'>search index not built yet — wait until first deploy.</p>";
+    }
+  });
+</script>
+</div>

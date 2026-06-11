@@ -1,0 +1,24 @@
+[Unit]
+Description=claude-code-memories briefing — weekly Discord status digest
+After=network-online.target
+Wants=network-online.target
+
+# Before installing this unit, replace REPLACE_USER and REPLACE_REPO_PATH
+# below with your username and the absolute path to the cloned repo.
+#   sed -i 's|REPLACE_USER|youruser|g; s|REPLACE_REPO_PATH|/home/youruser/claude-code-memories|g' \
+#       memories-briefing.service memories-briefing.timer
+# Then: sudo cp memories-briefing.{service,timer} /etc/systemd/system/
+#       sudo systemctl daemon-reload
+#       sudo systemctl enable --now memories-briefing.timer
+
+[Service]
+Type=oneshot
+User=REPLACE_USER
+Group=REPLACE_USER
+WorkingDirectory=REPLACE_REPO_PATH/bot
+EnvironmentFile=REPLACE_REPO_PATH/bot/bot.env
+ExecStart=/usr/bin/python3 REPLACE_REPO_PATH/bot/briefing.py
+TimeoutStartSec=60
+
+[Install]
+WantedBy=multi-user.target
