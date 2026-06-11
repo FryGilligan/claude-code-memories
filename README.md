@@ -5,6 +5,7 @@ markdown memory, optionally review it through a Discord bot, and publish the
 approved ones to a searchable static site.
 
 ![placeholder screenshot of the published site](docs/screenshot.png)
+![placeholder screenshot of the published site](docs/mem2.png)
 
 ## What it does
 
